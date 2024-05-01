@@ -22,6 +22,7 @@
 		4D22C8302BE0D49E002FCF5A /* BookData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D22C82F2BE0D49E002FCF5A /* BookData.swift */; };
 		4D22C8322BE0DD7F002FCF5A /* RecentlyViewedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D22C8312BE0DD7F002FCF5A /* RecentlyViewedCollectionViewCell.swift */; };
 		4D22C8342BE0DDBE002FCF5A /* BookCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D22C8332BE0DDBE002FCF5A /* BookCollectionViewCell.swift */; };
+		4D22C8382BE2463A002FCF5A /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D22C8372BE2463A002FCF5A /* HeaderView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		4D22C82F2BE0D49E002FCF5A /* BookData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookData.swift; sourceTree = "<group>"; };
 		4D22C8312BE0DD7F002FCF5A /* RecentlyViewedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyViewedCollectionViewCell.swift; sourceTree = "<group>"; };
 		4D22C8332BE0DDBE002FCF5A /* BookCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCollectionViewCell.swift; sourceTree = "<group>"; };
+		4D22C8372BE2463A002FCF5A /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 			isa = PBXGroup;
 			children = (
 				4D22C80D2BE0CACF002FCF5A /* Main.storyboard */,
+				4D22C8372BE2463A002FCF5A /* HeaderView.swift */,
 				4D22C8312BE0DD7F002FCF5A /* RecentlyViewedCollectionViewCell.swift */,
 				4D22C8332BE0DDBE002FCF5A /* BookCollectionViewCell.swift */,
 			);
@@ -209,6 +212,7 @@
 				4D22C8322BE0DD7F002FCF5A /* RecentlyViewedCollectionViewCell.swift in Sources */,
 				4D22C8342BE0DDBE002FCF5A /* BookCollectionViewCell.swift in Sources */,
 				4D22C8122BE0CACF002FCF5A /* BookSearch.xcdatamodeld in Sources */,
+				4D22C8382BE2463A002FCF5A /* HeaderView.swift in Sources */,
 				4D22C80C2BE0CACF002FCF5A /* SearchViewController.swift in Sources */,
 				4D22C8252BE0CDDD002FCF5A /* NetworkingManager.swift in Sources */,
 				4D22C8082BE0CACF002FCF5A /* AppDelegate.swift in Sources */,
