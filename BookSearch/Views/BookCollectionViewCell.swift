@@ -10,14 +10,14 @@ import UIKit
 class BookCollectionViewCell: UICollectionViewCell {
     static let identifier = "BookCollectionViewCell"
     
-    let bookImageView: UIImageView = {
+    var bookImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
     }()
     
-    let titleLabel: UILabel = {
+    var titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14, weight: .bold)
         label.numberOfLines = 0
@@ -32,13 +32,14 @@ class BookCollectionViewCell: UICollectionViewCell {
         
         bookImageView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(170)
+            $0.height.equalTo(150)
         }
         
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(bookImageView.snp.bottom).offset(5)
+            $0.top.equalTo(bookImageView.snp.bottom).offset(0)
             $0.leading.trailing.equalToSuperview().inset(5)
             $0.bottom.lessThanOrEqualToSuperview()
+            $0.height.equalTo(20)
         }
     }
 }

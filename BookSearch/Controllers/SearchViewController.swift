@@ -7,38 +7,66 @@
 
 import UIKit
 import SnapKit
+import Alamofire
+import Kingfisher
 
-class SearchViewController: UIViewController {
+class SearchViewController: UIViewController, UISearchBarDelegate {
     
-    let sectionTitles = ["최근 본 책", "Book List"]
+    let networkingManager = NetworkingManager.shared
+    var bookData: BookData?
     
-    let searchController: UISearchController = {
-        let searchController = UISearchController(searchResultsController: nil)
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "원하는 책을 검색해주세요."
-        return searchController
-    }()
     
+    let searchBar = UISearchBar()
     var collectionView: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSearchBar()
         setupCollectionView()
-        view.backgroundColor = .white
+        fetchBookData(withQuery: "세이노")
+        configure()
     }
     
-    func setupSearchBar() {
-        view.addSubview(searchController.searchBar)
-        navigationItem.hidesSearchBarWhenScrolling = true
-        definesPresentationContext = true
-        searchController.searchBar.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
-            $0.leading.trailing.equalToSuperview().inset(10)
+    func configure() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
+        view.backgroundColor = .white
+    }
+
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    func fetchBookData(withQuery query: String) {
+        networkingManager.fetchBookData(withQuery: query) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let bookData):
+                self.bookData = bookData
+                print(bookData)
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+            case .failure(let error):
+                print("Failed to fetch book data: \(error)")
+            }
         }
     }
     
+    func setupSearchBar() {
+        navigationItem.titleView = searchBar
+        searchBar.delegate = self
+        searchBar.placeholder = "원하는 책을 검색해주세요."
+        searchBar.sizeToFit()
+        
+    }
     
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if let query = searchBar.text {
+            fetchBookData(withQuery: query)
+        }
+        searchBar.resignFirstResponder()
+    }
     
     func setupCollectionView() {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
@@ -55,12 +83,12 @@ class SearchViewController: UIViewController {
                 section?.interGroupSpacing = 5
                 section?.orthogonalScrollingBehavior = .continuous
             case 1:
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalHeight(1.0))
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .absolute(160))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5)
                 
                 
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(170))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(180))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
                 
                 section = NSCollectionLayoutSection(group: group)
@@ -80,13 +108,13 @@ class SearchViewController: UIViewController {
         collectionView.register(RecentlyViewedCollectionViewCell.self, forCellWithReuseIdentifier: RecentlyViewedCollectionViewCell.identifier)
         collectionView.register(BookCollectionViewCell.self, forCellWithReuseIdentifier: BookCollectionViewCell.identifier)
         collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderView.identifier)
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = .systemGray5
         collectionView.dataSource = self
         
         view.addSubview(collectionView)
         
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(searchController.searchBar.snp.bottom).offset(10)
+            $0.top.equalToSuperview().offset(10)
             $0.leading.trailing.bottom.equalToSuperview()
         }
     }
@@ -98,7 +126,11 @@ extension SearchViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        if section == 0 {
+            return 10
+        } else {
+            return bookData?.documents.count ?? 0
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -110,8 +142,19 @@ extension SearchViewController: UICollectionViewDataSource {
             return cell
         } else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookCollectionViewCell.identifier, for: indexPath) as? BookCollectionViewCell else { fatalError("에러입니다.") }
-            cell.backgroundColor = .brown
             cell.setupView()
+            
+            if let document = bookData?.documents[indexPath.item] {
+                cell.titleLabel.text = document.title
+                
+                if let url = URL(string:  document.thumbnail) {
+                    cell.bookImageView.kf.setImage(with: url)
+                }
+            }
+            
+            cell.bookImageView.clipsToBounds = true
+            cell.bookImageView.layer.cornerRadius = 16
+            
             return cell
         }
     }
@@ -123,13 +166,12 @@ extension SearchViewController: UICollectionViewDataSource {
         
         let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderView.identifier, for: indexPath) as! HeaderView
         
-        // 각 섹션에 대한 타이틀 설정
         let sectionTitle: String
         switch indexPath.section {
         case 0:
             sectionTitle = "최근 본 책"
         case 1:
-            sectionTitle = "Book List"
+            sectionTitle = "Best List"
         default:
             fatalError("Unknown section")
         }

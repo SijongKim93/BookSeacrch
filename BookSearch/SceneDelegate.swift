@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let tabBarVC = UITabBarController()
         
-        let firstVC = SearchViewController()
+        let firstVC = UINavigationController(rootViewController: SearchViewController())
         firstVC.tabBarItem = UITabBarItem(title: "책 검색", image: UIImage(systemName: "book"), tag: 0)
         
         let secondVC = MyPageViewController()
