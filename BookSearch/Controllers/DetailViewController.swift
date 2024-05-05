@@ -15,7 +15,7 @@ class DetailViewController: UIViewController {
     
     let mainTitle: UILabel = {
         var label =  UILabel()
-        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 23, weight: .bold)
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
@@ -23,24 +23,25 @@ class DetailViewController: UIViewController {
     
     let subTitle: UILabel = {
         var label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.font = UIFont.systemFont(ofSize: 16)
         label.numberOfLines = 1
         label.textAlignment = .center
-        label.textColor = .systemGray5
         return label
     }()
     
     let bookImageView: UIImageView = {
         var imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 16
+        imageView.layer.shadowColor = UIColor.black.cgColor
+        imageView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        imageView.layer.shadowRadius = 6
+        imageView.layer.shadowOpacity = 0.5
         return imageView
     }()
     
     let bookPrice: UILabel = {
         var label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 15)
+        label.font = UIFont.systemFont(ofSize: 20)
         label.textAlignment = .center
         return label
     }()
@@ -50,30 +51,31 @@ class DetailViewController: UIViewController {
     
     let bookContents: UILabel = {
        var label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 13)
+        label.font = UIFont.systemFont(ofSize: 25)
+        label.numberOfLines = 0
         return label
     }()
     
     let actionButton = JJFloatingActionButton()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         addFloatingButton()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemGray5
     }
-    
     
     func setupView() {
         view.addSubview(mainTitle)
         view.addSubview(subTitle)
         view.addSubview(bookImageView)
         view.addSubview(bookPrice)
-        
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubview(bookContents)
         
         mainTitle.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(20)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
             $0.leading.trailing.equalToSuperview().inset(10)
         }
         
@@ -83,35 +85,48 @@ class DetailViewController: UIViewController {
         }
         
         bookImageView.snp.makeConstraints {
-            $0.top.equalTo(subTitle.snp.bottom).offset(20)
-            $0.width.equalTo(170)
-            $0.height.equalTo(200)
+            $0.top.equalTo(subTitle.snp.bottom).offset(30)
+            $0.width.equalTo(250)
+            $0.height.equalTo(350)
             $0.centerX.equalToSuperview()
         }
         
         bookPrice.snp.makeConstraints {
-            $0.top.equalTo(bookImageView.snp.bottom).offset(10)
+            $0.top.equalTo(bookImageView.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(10)
         }
         
+        scrollView.snp.makeConstraints {
+            $0.top.equalTo(bookPrice.snp.bottom).offset(30)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
         
+        contentView.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalTo(scrollView)
+            $0.width.equalTo(scrollView)
+        }
+        
+        bookContents.snp.makeConstraints {
+            $0.top.bottom.equalTo(contentView)
+            $0.leading.trailing.equalTo(contentView).inset(20)
+        }
         
     }
     
     func addFloatingButton() {
-        actionButton.addItem(title: "책 담기", image: UIImage(systemName: "book.fill")?.withRenderingMode(.alwaysTemplate)) { item in
+        actionButton.addItem(title: "책담기", image: UIImage(systemName: "book.fill")?.withRenderingMode(.alwaysTemplate)) { item in
             // do something
         }
 
-        actionButton.addItem(title: "찜하기", image: UIImage(systemName: "heart.fill")?.withRenderingMode(.alwaysTemplate)) { item in
+        actionButton.addItem(title: "검색하기", image: UIImage(systemName: "magnifyingglass")?.withRenderingMode(.alwaysTemplate)) { item in
             // do something
         }
 
         actionButton.addItem(title: "뒤로가기", image: UIImage(systemName: "return")?.withRenderingMode(.alwaysTemplate)) { item in
-            // do something
+            self.dismiss(animated: true, completion: nil)
         }
         
         actionButton.display(inViewController: self)
-        
     }
 }

@@ -27,10 +27,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         fetchBookData(withQuery: "세이노")
         
     }
-
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
-    }
     
     func fetchBookData(withQuery query: String) {
         networkingManager.fetchBookData(withQuery: query) { [weak self] result in
@@ -52,7 +48,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         searchBar.delegate = self
         searchBar.placeholder = "원하는 책을 검색해주세요."
         searchBar.sizeToFit()
-        
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -77,12 +72,12 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                 section?.interGroupSpacing = 5
                 section?.orthogonalScrollingBehavior = .continuous
             case 1:
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .absolute(160))
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .absolute(200))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5)
                 
                 
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(180))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(200))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
                 
                 section = NSCollectionLayoutSection(group: group)
@@ -91,7 +86,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                 break
             }
             
-            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(30))
+            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(50))
             let headerSupplementary = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
             section?.boundarySupplementaryItems = [headerSupplementary]
             
@@ -183,12 +178,26 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
             // 최근 본 책의 상세 정보를 보여주는 화면으로 이동하는 기능 등을 구현
             break
         case 1:
-            print("눌렸습니다")
             let detailVC = DetailViewController()
+            let bookData = bookData?.documents[indexPath.item]
             
+            detailVC.mainTitle.text = bookData?.title
+            detailVC.bookContents.text = bookData?.contents
             
-            // 책의 데이터를 전달하거나, 해당 데이터를 DetailViewController에서 다시 로드하는 등의 작업을 수행할 수 있습니다.
-            // 책의 정보를 bookData에서 가져와 detailVC의 프로퍼티에 설정하는 등의 작업을 수행합니다.
+            let bookPrice = bookData?.price ?? 0
+            let formattedPrice = NumberFormatter.localizedString(from: NSNumber(value: bookPrice), number: .decimal)
+            detailVC.bookPrice.text = "\(formattedPrice)원"
+            
+            if let imageURL = bookData?.thumbnail, let imageURL = URL(string: imageURL) {
+                detailVC.bookImageView.kf.setImage(with: imageURL)
+            }
+            
+            if let authors = bookData?.authors {
+                let authorsString = authors.joined(separator: ", ")
+                detailVC.subTitle.text = authorsString
+            } else {
+                detailVC.subTitle.text = "작가 정보 없음"
+            }
             
             present(detailVC, animated: true, completion: nil)
         default:

@@ -25,6 +25,7 @@
 		4D22C8382BE2463A002FCF5A /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D22C8372BE2463A002FCF5A /* HeaderView.swift */; };
 		4D89480A2BE5D4D900C9499B /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8948092BE5D4D900C9499B /* DetailViewController.swift */; };
 		4D89480D2BE5FC4500C9499B /* JJFloatingActionButton in Frameworks */ = {isa = PBXBuildFile; productRef = 4D89480C2BE5FC4500C9499B /* JJFloatingActionButton */; };
+		4D89480F2BE77C4600C9499B /* MypageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D89480E2BE77C4600C9499B /* MypageTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		4D22C8332BE0DDBE002FCF5A /* BookCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCollectionViewCell.swift; sourceTree = "<group>"; };
 		4D22C8372BE2463A002FCF5A /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		4D8948092BE5D4D900C9499B /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		4D89480E2BE77C4600C9499B /* MypageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MypageTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +113,7 @@
 				4D22C8372BE2463A002FCF5A /* HeaderView.swift */,
 				4D22C8312BE0DD7F002FCF5A /* RecentlyViewedCollectionViewCell.swift */,
 				4D22C8332BE0DDBE002FCF5A /* BookCollectionViewCell.swift */,
+				4D89480E2BE77C4600C9499B /* MypageTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -216,6 +219,7 @@
 			files = (
 				4D89480A2BE5D4D900C9499B /* DetailViewController.swift in Sources */,
 				4D22C8232BE0CDAF002FCF5A /* MyPageViewController.swift in Sources */,
+				4D89480F2BE77C4600C9499B /* MypageTableViewCell.swift in Sources */,
 				4D22C8302BE0D49E002FCF5A /* BookData.swift in Sources */,
 				4D22C8322BE0DD7F002FCF5A /* RecentlyViewedCollectionViewCell.swift in Sources */,
 				4D22C8342BE0DDBE002FCF5A /* BookCollectionViewCell.swift in Sources */,
