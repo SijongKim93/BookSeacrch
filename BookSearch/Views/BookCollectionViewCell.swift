@@ -32,14 +32,12 @@ class BookCollectionViewCell: UICollectionViewCell {
         
         bookImageView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(150)
+            $0.height.equalToSuperview().multipliedBy(0.9)
         }
         
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(bookImageView.snp.bottom).offset(0)
-            $0.leading.trailing.equalToSuperview().inset(5)
-            $0.bottom.lessThanOrEqualToSuperview()
-            $0.height.equalTo(20)
+            $0.top.equalTo(bookImageView.snp.bottom).offset(5)
+            $0.leading.bottom.trailing.equalToSuperview()
         }
     }
 }

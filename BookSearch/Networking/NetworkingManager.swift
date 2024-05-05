@@ -24,11 +24,6 @@ class NetworkingManager {
         AF.request(url, parameters: parameters, headers: headers).responseData { response in
             switch response.result {
             case .success(let data):
-                print("Received data from network request:")
-                if let jsonString = String(data: data, encoding: .utf8) {
-                    print(jsonString)
-                }
-                
                 do {
                     let decodedData = try JSONDecoder().decode(BookData.self, from: data)
                     completion(.success(decodedData))

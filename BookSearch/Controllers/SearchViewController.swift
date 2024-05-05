@@ -23,14 +23,9 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         super.viewDidLoad()
         setupSearchBar()
         setupCollectionView()
-        fetchBookData(withQuery: "세이노")
-        configure()
-    }
-    
-    func configure() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tapGesture)
         view.backgroundColor = .white
+        fetchBookData(withQuery: "세이노")
+        
     }
 
     @objc func dismissKeyboard() {
@@ -43,7 +38,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             switch result {
             case .success(let bookData):
                 self.bookData = bookData
-                print(bookData)
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
                 }
@@ -110,6 +104,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderView.identifier)
         collectionView.backgroundColor = .systemGray5
         collectionView.dataSource = self
+        collectionView.delegate = self
+        
         
         view.addSubview(collectionView)
         
@@ -120,7 +116,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     }
 }
 
-extension SearchViewController: UICollectionViewDataSource {
+extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 2
     }
@@ -180,4 +176,24 @@ extension SearchViewController: UICollectionViewDataSource {
         
         return headerView
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch indexPath.section {
+        case 0:
+            // 최근 본 책의 상세 정보를 보여주는 화면으로 이동하는 기능 등을 구현
+            break
+        case 1:
+            print("눌렸습니다")
+            let detailVC = DetailViewController()
+            
+            
+            // 책의 데이터를 전달하거나, 해당 데이터를 DetailViewController에서 다시 로드하는 등의 작업을 수행할 수 있습니다.
+            // 책의 정보를 bookData에서 가져와 detailVC의 프로퍼티에 설정하는 등의 작업을 수행합니다.
+            
+            present(detailVC, animated: true, completion: nil)
+        default:
+            break
+        }
+    }
+    
 }

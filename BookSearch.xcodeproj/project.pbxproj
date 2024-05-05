@@ -23,6 +23,8 @@
 		4D22C8322BE0DD7F002FCF5A /* RecentlyViewedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D22C8312BE0DD7F002FCF5A /* RecentlyViewedCollectionViewCell.swift */; };
 		4D22C8342BE0DDBE002FCF5A /* BookCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D22C8332BE0DDBE002FCF5A /* BookCollectionViewCell.swift */; };
 		4D22C8382BE2463A002FCF5A /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D22C8372BE2463A002FCF5A /* HeaderView.swift */; };
+		4D89480A2BE5D4D900C9499B /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8948092BE5D4D900C9499B /* DetailViewController.swift */; };
+		4D89480D2BE5FC4500C9499B /* JJFloatingActionButton in Frameworks */ = {isa = PBXBuildFile; productRef = 4D89480C2BE5FC4500C9499B /* JJFloatingActionButton */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +43,7 @@
 		4D22C8312BE0DD7F002FCF5A /* RecentlyViewedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyViewedCollectionViewCell.swift; sourceTree = "<group>"; };
 		4D22C8332BE0DDBE002FCF5A /* BookCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCollectionViewCell.swift; sourceTree = "<group>"; };
 		4D22C8372BE2463A002FCF5A /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		4D8948092BE5D4D900C9499B /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +51,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D89480D2BE5FC4500C9499B /* JJFloatingActionButton in Frameworks */,
 				4D22C82E2BE0D481002FCF5A /* SnapKit in Frameworks */,
 				4D22C82B2BE0D474002FCF5A /* Kingfisher in Frameworks */,
 				4D22C8282BE0D467002FCF5A /* Alamofire in Frameworks */,
@@ -95,6 +99,7 @@
 			children = (
 				4D22C80B2BE0CACF002FCF5A /* SearchViewController.swift */,
 				4D22C8222BE0CDAF002FCF5A /* MyPageViewController.swift */,
+				4D8948092BE5D4D900C9499B /* DetailViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -146,6 +151,7 @@
 				4D22C8272BE0D467002FCF5A /* Alamofire */,
 				4D22C82A2BE0D474002FCF5A /* Kingfisher */,
 				4D22C82D2BE0D481002FCF5A /* SnapKit */,
+				4D89480C2BE5FC4500C9499B /* JJFloatingActionButton */,
 			);
 			productName = BookSearch;
 			productReference = 4D22C8042BE0CACF002FCF5A /* BookSearch.app */;
@@ -179,6 +185,7 @@
 				4D22C8262BE0D467002FCF5A /* XCRemoteSwiftPackageReference "Alamofire" */,
 				4D22C8292BE0D474002FCF5A /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				4D22C82C2BE0D481002FCF5A /* XCRemoteSwiftPackageReference "SnapKit" */,
+				4D89480B2BE5FC4500C9499B /* XCRemoteSwiftPackageReference "JJFloatingActionButton" */,
 			);
 			productRefGroup = 4D22C8052BE0CACF002FCF5A /* Products */;
 			projectDirPath = "";
@@ -207,6 +214,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D89480A2BE5D4D900C9499B /* DetailViewController.swift in Sources */,
 				4D22C8232BE0CDAF002FCF5A /* MyPageViewController.swift in Sources */,
 				4D22C8302BE0D49E002FCF5A /* BookData.swift in Sources */,
 				4D22C8322BE0DD7F002FCF5A /* RecentlyViewedCollectionViewCell.swift in Sources */,
@@ -465,6 +473,14 @@
 				minimumVersion = 5.7.1;
 			};
 		};
+		4D89480B2BE5FC4500C9499B /* XCRemoteSwiftPackageReference "JJFloatingActionButton" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jjochen/JJFloatingActionButton";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -482,6 +498,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4D22C82C2BE0D481002FCF5A /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		4D89480C2BE5FC4500C9499B /* JJFloatingActionButton */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4D89480B2BE5FC4500C9499B /* XCRemoteSwiftPackageReference "JJFloatingActionButton" */;
+			productName = JJFloatingActionButton;
 		};
 /* End XCSwiftPackageProductDependency section */
 

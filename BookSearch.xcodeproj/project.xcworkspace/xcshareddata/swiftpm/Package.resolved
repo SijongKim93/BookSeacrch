@@ -1,5 +1,5 @@
 {
-  "originHash" : "2217b32c9649422866d45c7a34875564dd50c5cd103e53eec2bc74352d57aef5",
+  "originHash" : "5ccaaad77c65d737d9926dc1c768dd0930ccfc32519238f2135ca3122d0b42ca",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "f455c2975872ccd2d9c81594c658af65716e9b9a",
         "version" : "5.9.1"
+      }
+    },
+    {
+      "identity" : "jjfloatingactionbutton",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jjochen/JJFloatingActionButton",
+      "state" : {
+        "revision" : "2c561601ec0da6f85c2c061a2560d82d39832951",
+        "version" : "3.0.1"
       }
     },
     {
