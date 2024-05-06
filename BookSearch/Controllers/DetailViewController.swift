@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import JJFloatingActionButton
+import CoreData
 
 
 class DetailViewController: UIViewController {
@@ -114,9 +115,15 @@ class DetailViewController: UIViewController {
         
     }
     
+//    func addBookToCoreData(_ product: Document) {
+//        CoreDataManager.shared.saveWishListData() {
+//            print("책이 코어 데이터에 저장되었습니다.")
+//        }
+//    }
+    
     func addFloatingButton() {
         actionButton.addItem(title: "책담기", image: UIImage(systemName: "book.fill")?.withRenderingMode(.alwaysTemplate)) { item in
-            // do something
+
         }
 
         actionButton.addItem(title: "검색하기", image: UIImage(systemName: "magnifyingglass")?.withRenderingMode(.alwaysTemplate)) { item in

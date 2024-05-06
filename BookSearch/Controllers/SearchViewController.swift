@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import Alamofire
 import Kingfisher
+import CoreData
 
 class SearchViewController: UIViewController, UISearchBarDelegate {
     
