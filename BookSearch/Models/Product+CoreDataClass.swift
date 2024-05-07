@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-@objc(Product)
-public class BookList: NSManagedObject {
+@objc(BookCoreData)
+public class BookCoreData: NSManagedObject {
 
 }

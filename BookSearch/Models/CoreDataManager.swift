@@ -13,23 +13,22 @@ class CoreDataManager {
     
     static let shared = CoreDataManager()
     private init() {}
-
+    
     let appDelegate = UIApplication.shared.delegate as? AppDelegate
     lazy var context = appDelegate?.persistentContainer.viewContext
 
-    let coreDataName: String = "BookList"
+    let coreDataName: String = "BookCoreData"
     
-    
-    func getBookListFromCoreData() -> [BookList] {
-        var bookList: [BookList] = []
+    func getBookListFromCoreData() -> [BookCoreData] {
+        var bookList: [BookCoreData] = []
         
         if let context = context {
             let request = NSFetchRequest<NSManagedObject>(entityName: self.coreDataName)
-            let idOrder = NSSortDescriptor(key: "id", ascending: true)
+            let idOrder = NSSortDescriptor(key: "title", ascending: true)
             request.sortDescriptors = [idOrder]
             
             do {
-                if let fetchBookList = try context.fetch(request) as? [BookList] {
+                if let fetchBookList = try context.fetch(request) as? [BookCoreData] {
                     bookList = fetchBookList
                 }
             } catch {
@@ -41,7 +40,7 @@ class CoreDataManager {
     }
     
     
-    func saveWishListData(_ product: Document, completion: @escaping () -> Void) {
+    func saveBookListData(_ booklist: Document, completion: @escaping () -> Void) {
         guard let context = context else {
             print("context를 가져올 수 없습니다.")
             return
@@ -49,9 +48,10 @@ class CoreDataManager {
         
         if let entity = NSEntityDescription.entity(forEntityName: coreDataName, in: context) {
             let newProduct = NSManagedObject(entity: entity, insertInto: context)
-            newProduct.setValue(product.authors, forKey: "authors")
-            newProduct.setValue(product.title, forKey: "title")
-            newProduct.setValue(product.price, forKey: "price")
+            let authorsString = booklist.authors.joined(separator: ", ")
+            newProduct.setValue(authorsString, forKey: "authors")
+            newProduct.setValue(booklist.title, forKey: "title")
+            newProduct.setValue(booklist.price, forKey: "price")
             
             do {
                 try context.save()
@@ -64,14 +64,14 @@ class CoreDataManager {
         }
     }
     
-    func deleteBookList(_ product: Document, completion: @escaping () -> Void) {
+    func deleteBookList(_ bookList: Document, completion: @escaping () -> Void) {
         guard let context = context else {
             print("content를 가져올 수 없습니다.")
             return
         }
         
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: coreDataName)
-        fetchRequest.predicate = NSPredicate(format: "title == %@", product.title)
+        fetchRequest.predicate = NSPredicate(format: "title == %@", bookList.title)
         
         do {
             if let result = try context.fetch(fetchRequest) as? [NSManagedObject] {

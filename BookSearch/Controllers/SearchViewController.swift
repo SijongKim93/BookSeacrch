@@ -182,8 +182,12 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
             let detailVC = DetailViewController()
             let bookData = bookData?.documents[indexPath.item]
             
+            //텍스트에 값만 넣어진 상태, 데이터가 넘어가지 않음
+            detailVC.bookData = bookData
+            
             detailVC.mainTitle.text = bookData?.title
             detailVC.bookContents.text = bookData?.contents
+            detailVC.subTitle.text = bookData?.authorsToString()
             
             let bookPrice = bookData?.price ?? 0
             let formattedPrice = NumberFormatter.localizedString(from: NSNumber(value: bookPrice), number: .decimal)
@@ -191,13 +195,6 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
             
             if let imageURL = bookData?.thumbnail, let imageURL = URL(string: imageURL) {
                 detailVC.bookImageView.kf.setImage(with: imageURL)
-            }
-            
-            if let authors = bookData?.authors {
-                let authorsString = authors.joined(separator: ", ")
-                detailVC.subTitle.text = authorsString
-            } else {
-                detailVC.subTitle.text = "작가 정보 없음"
             }
             
             present(detailVC, animated: true, completion: nil)

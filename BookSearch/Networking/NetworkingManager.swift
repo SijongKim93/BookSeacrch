@@ -15,7 +15,6 @@ class NetworkingManager {
     static let shared = NetworkingManager()
     private init() {}
     
-    
     func fetchBookData(withQuery query: String, completion: @escaping (Result<BookData, Error>) -> Void) {
         let url = "https://dapi.kakao.com/v3/search/book"
         let headers: HTTPHeaders = ["Authorization": "KakaoAK 5aceac1423e03e3ca7f40477c827460d"]

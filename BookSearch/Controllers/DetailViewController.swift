@@ -14,6 +14,8 @@ import CoreData
 class DetailViewController: UIViewController {
     static let identifier = "DetailView"
     
+    var bookData: Document?
+    
     let mainTitle: UILabel = {
         var label =  UILabel()
         label.font = UIFont.systemFont(ofSize: 23, weight: .bold)
@@ -64,6 +66,8 @@ class DetailViewController: UIViewController {
         setupView()
         addFloatingButton()
         view.backgroundColor = .systemGray5
+        print(bookData ?? 0)
+        
     }
     
     func setupView() {
@@ -115,16 +119,22 @@ class DetailViewController: UIViewController {
         
     }
     
-//    func addBookToCoreData(_ product: Document) {
-//        CoreDataManager.shared.saveWishListData() {
-//            print("책이 코어 데이터에 저장되었습니다.")
-//        }
-//    }
+    func saveBookToCoreData() {
+        guard let bookData = bookData else {
+            print("bookData가 없습니다.")
+            return
+        }
+        
+        CoreDataManager.shared.saveBookListData(bookData) {
+            print("코어데이터에 저장되었습니다.")
+        }
+    }
     
     func addFloatingButton() {
         actionButton.addItem(title: "책담기", image: UIImage(systemName: "book.fill")?.withRenderingMode(.alwaysTemplate)) { item in
-
+            self.saveBookToCoreData()
         }
+        
 
         actionButton.addItem(title: "검색하기", image: UIImage(systemName: "magnifyingglass")?.withRenderingMode(.alwaysTemplate)) { item in
             // do something
@@ -137,3 +147,5 @@ class DetailViewController: UIViewController {
         actionButton.display(inViewController: self)
     }
 }
+
+

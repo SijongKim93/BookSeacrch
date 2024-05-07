@@ -31,6 +31,11 @@ struct Document: Codable {
         case salePrice = "sale_price"
         case status, thumbnail, title, translators, url
     }
+    
+    func authorsToString() -> String {
+        return authors.joined(separator: ", ")
+    }
+    
 }
 
 
