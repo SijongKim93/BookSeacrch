@@ -34,7 +34,7 @@ class BookCollectionViewCell: UICollectionViewCell {
             $0.top.leading.trailing.equalToSuperview()
             $0.height.equalToSuperview().multipliedBy(0.9)
         }
-        
+          
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(bookImageView.snp.bottom).offset(5)
             $0.leading.bottom.trailing.equalToSuperview()

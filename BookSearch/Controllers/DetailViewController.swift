@@ -131,13 +131,25 @@ class DetailViewController: UIViewController {
     }
     
     func addFloatingButton() {
-        actionButton.addItem(title: "책담기", image: UIImage(systemName: "book.fill")?.withRenderingMode(.alwaysTemplate)) { item in
+        actionButton.addItem(title: "책담기", image: UIImage(systemName: "book.fill")?.withRenderingMode(.alwaysTemplate)) { [self] item in
             self.saveBookToCoreData()
+            
+            let bookName = self.bookData?.title
+            if let bookName = bookName {
+                showAlert(message: "\(bookName) 저장되었습니다.")
+            } else {
+                showAlert(message: "책이름 없이 저장되었습니다.")
+            }
         }
         
-
         actionButton.addItem(title: "검색하기", image: UIImage(systemName: "magnifyingglass")?.withRenderingMode(.alwaysTemplate)) { item in
-            // do something
+            self.dismiss(animated: true) {
+                if let navigationController = self.presentingViewController as? UINavigationController,
+                   let searchViewController = navigationController.topViewController as? SearchViewController {
+                    print("searchbar")
+                    searchViewController.searchBar.becomeFirstResponder()
+                }
+            }
         }
 
         actionButton.addItem(title: "뒤로가기", image: UIImage(systemName: "return")?.withRenderingMode(.alwaysTemplate)) { item in
@@ -145,6 +157,16 @@ class DetailViewController: UIViewController {
         }
         
         actionButton.display(inViewController: self)
+    }
+    
+    
+    func showAlert(message: String) {
+        let alert = UIAlertController(title: "알림", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "확인", style: .default) { _ in
+            self.dismiss(animated: true, completion: nil)
+        }
+        alert.addAction(okAction)
+        present(alert, animated: true, completion: nil)
     }
 }
 

@@ -36,6 +36,12 @@ struct Document: Codable {
         return authors.joined(separator: ", ")
     }
     
+    func formattedPrice() -> String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        let formattedPrice = numberFormatter.string(from: NSNumber(value: price)) ?? ""
+        return "\(formattedPrice)원"
+    }
 }
 
 

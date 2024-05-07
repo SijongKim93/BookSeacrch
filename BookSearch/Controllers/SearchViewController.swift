@@ -16,7 +16,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     let networkingManager = NetworkingManager.shared
     var bookData: BookData?
     
-    
     let searchBar = UISearchBar()
     var collectionView: UICollectionView!
     
@@ -182,16 +181,12 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
             let detailVC = DetailViewController()
             let bookData = bookData?.documents[indexPath.item]
             
-            //텍스트에 값만 넣어진 상태, 데이터가 넘어가지 않음
             detailVC.bookData = bookData
             
             detailVC.mainTitle.text = bookData?.title
             detailVC.bookContents.text = bookData?.contents
             detailVC.subTitle.text = bookData?.authorsToString()
-            
-            let bookPrice = bookData?.price ?? 0
-            let formattedPrice = NumberFormatter.localizedString(from: NSNumber(value: bookPrice), number: .decimal)
-            detailVC.bookPrice.text = "\(formattedPrice)원"
+            detailVC.bookPrice.text = bookData?.formattedPrice()
             
             if let imageURL = bookData?.thumbnail, let imageURL = URL(string: imageURL) {
                 detailVC.bookImageView.kf.setImage(with: imageURL)
@@ -202,5 +197,4 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
             break
         }
     }
-    
 }
