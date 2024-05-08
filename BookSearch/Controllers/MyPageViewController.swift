@@ -11,6 +11,8 @@ import CoreData
 
 class MyPageViewController: UIViewController {
     
+    weak var delegate: SearchViewControllerDelegate?
+    
     var bookList: [BookCoreData] = []
     
     let topStackView: UIStackView = {
@@ -65,8 +67,8 @@ class MyPageViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        bookList = CoreDataManager.shared.getBookListFromCoreData() // CoreData에서 데이터를 가져옴
-        mypageTableView.reloadData() // 테이블 뷰 리로드
+        bookList = CoreDataManager.shared.getBookListFromCoreData()
+        mypageTableView.reloadData()
     }
     
     func setupUI() {
@@ -78,12 +80,15 @@ class MyPageViewController: UIViewController {
         topStackView.addArrangedSubview(centerLabel)
         topStackView.addArrangedSubview(rightButton)
         
+        let mypageVC = MyPageViewController()
+        mypageVC.delegate = self
+        
         mypageTableView.dataSource = self
         mypageTableView.delegate = self
         mypageTableView.register(MypageTableViewCell.self, forCellReuseIdentifier: MypageTableViewCell.identifier)
         
         leftButton.addTarget(self, action: #selector(deleteAllBooks), for: .touchUpInside)
-        
+        rightButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
         viewLine.backgroundColor = .black
         
         topStackView.snp.makeConstraints {
@@ -109,6 +114,10 @@ class MyPageViewController: UIViewController {
         }
     }
     
+    @objc func searchButtonTapped() {
+        searchButtonPressed()
+    }
+    
     @objc func deleteAllBooks() {
         let alertController = UIAlertController(title: "삭제 확인", message: "담은 책을 모두 삭제 하시겠습니까?", preferredStyle: .alert)
         
@@ -128,7 +137,17 @@ class MyPageViewController: UIViewController {
 }
 
 
-extension MyPageViewController: UITableViewDelegate, UITableViewDataSource {
+extension MyPageViewController: UITableViewDelegate, UITableViewDataSource, SearchViewControllerDelegate {
+    
+    func searchButtonPressed() {
+        let searchView = SearchViewController()
+        guard let tabBarController = self.tabBarController else { return }
+        
+        tabBarController.selectedIndex = 0
+        delegate?.searchButtonPressed()
+        print("확인")
+    }
+    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         bookList.count

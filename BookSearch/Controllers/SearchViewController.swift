@@ -11,10 +11,15 @@ import Alamofire
 import Kingfisher
 import CoreData
 
+
+
 class SearchViewController: UIViewController, UISearchBarDelegate {
+    
+    weak var delegate: SearchViewControllerDelegate?
     
     let networkingManager = NetworkingManager.shared
     var bookData: BookData?
+    var recentlyViewedBooks: [RecentlyBookInfo] = []
     
     let searchBar = UISearchBar()
     var collectionView: UICollectionView!
@@ -27,6 +32,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         fetchBookData(withQuery: "세이노")
         
     }
+    
     
     func fetchBookData(withQuery query: String) {
         networkingManager.fetchBookData(withQuery: query) { [weak self] result in
@@ -86,8 +92,9 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                 break
             }
             
-            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(50))
+            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(40))
             let headerSupplementary = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+            
             section?.boundarySupplementaryItems = [headerSupplementary]
             
             return section
@@ -97,7 +104,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         collectionView.register(RecentlyViewedCollectionViewCell.self, forCellWithReuseIdentifier: RecentlyViewedCollectionViewCell.identifier)
         collectionView.register(BookCollectionViewCell.self, forCellWithReuseIdentifier: BookCollectionViewCell.identifier)
         collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderView.identifier)
-        collectionView.backgroundColor = .systemGray5
         collectionView.dataSource = self
         collectionView.delegate = self
         
@@ -108,17 +114,24 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             $0.top.equalToSuperview().offset(10)
             $0.leading.trailing.bottom.equalToSuperview()
         }
+        
     }
 }
 
-extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegate, SearchViewControllerDelegate {
+    
+    func searchButtonPressed() {
+        self.searchBar.becomeFirstResponder()
+    }
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 2
     }
     
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 {
-            return 10
+            return recentlyViewedBooks.count
         } else {
             return bookData?.documents.count ?? 0
         }
@@ -127,8 +140,17 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecentlyViewedCollectionViewCell.identifier, for: indexPath) as? RecentlyViewedCollectionViewCell else { fatalError("에러입니다.") }
-            cell.backgroundColor = .blue
             cell.setupView()
+            
+            let recentBook = recentlyViewedBooks[indexPath.item]
+            cell.titleLabel.text = recentBook.title
+            
+            if let url = URL(string: recentBook.thumbnail) {
+                cell.bookImageView.kf.setImage(with: url)
+            }
+            
+            cell.bookImageView.clipsToBounds = true
+            cell.bookImageView.layer.cornerRadius = 16
             
             return cell
         } else {
@@ -157,9 +179,13 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         
         let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderView.identifier, for: indexPath) as! HeaderView
         
-        let sectionTitle: String
+        let sectionTitle: String?
         switch indexPath.section {
         case 0:
+            if recentlyViewedBooks.isEmpty {
+                headerView.isHidden = true
+                return headerView
+            }
             sectionTitle = "최근 본 책"
         case 1:
             sectionTitle = "Best List"
@@ -167,7 +193,10 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
             fatalError("Unknown section")
         }
         
-        headerView.configure(title: sectionTitle)
+        headerView.titleLabel.text = sectionTitle
+        headerView.isHidden = false
+        
+        headerView.configure(title: sectionTitle ?? "")
         
         return headerView
     }
@@ -175,26 +204,65 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
-            // 최근 본 책의 상세 정보를 보여주는 화면으로 이동하는 기능 등을 구현
+            showBookRecent(at: indexPath)
             break
         case 1:
-            let detailVC = DetailViewController()
-            let bookData = bookData?.documents[indexPath.item]
-            
-            detailVC.bookData = bookData
-            
-            detailVC.mainTitle.text = bookData?.title
-            detailVC.bookContents.text = bookData?.contents
-            detailVC.subTitle.text = bookData?.authorsToString()
-            detailVC.bookPrice.text = bookData?.formattedPrice()
-            
-            if let imageURL = bookData?.thumbnail, let imageURL = URL(string: imageURL) {
-                detailVC.bookImageView.kf.setImage(with: imageURL)
-            }
-            
-            present(detailVC, animated: true, completion: nil)
+            addToRecentlyViewedBook(indexPath: indexPath)
+            showBookDetail(at: indexPath)
         default:
             break
         }
     }
+    
+    func addToRecentlyViewedBook(indexPath: IndexPath) {
+        guard let selectedBook = bookData?.documents[indexPath.item] else { return }
+        guard !recentlyViewedBooks.contains(where: { $0.title == selectedBook.title }) else { return }
+        
+        let recentlyBookInfo = RecentlyBookInfo(title: selectedBook.title, thumbnail: selectedBook.thumbnail, authors: selectedBook.authors, price: selectedBook.price, contents: selectedBook.contents)
+        recentlyViewedBooks.insert(recentlyBookInfo, at: 0)
+        
+        collectionView.reloadData()
+    }
+    
+    func showBookDetail(at indexPath: IndexPath) {
+        let detailVC = DetailViewController()
+        let bookData = bookData?.documents[indexPath.item]
+        
+        detailVC.bookData = bookData
+        detailVC.delegate = self
+        
+        detailVC.mainTitle.text = bookData?.title
+        detailVC.bookContents.text = bookData?.contents
+        detailVC.subTitle.text = bookData?.authorsToString()
+        detailVC.bookPrice.text = bookData?.formattedPrice()
+        
+        if let imageURL = bookData?.thumbnail, let imageURL = URL(string: imageURL) {
+            detailVC.bookImageView.kf.setImage(with: imageURL)
+        }
+        
+        present(detailVC, animated: true, completion: nil)
+    }
+    
+    func showBookRecent(at indexPath: IndexPath) {
+        let detailVC = DetailViewController()
+        let recentBook = recentlyViewedBooks[indexPath.item]
+        let bookData = bookData?.documents[indexPath.item]
+        
+        detailVC.bookData = bookData
+        detailVC.delegate = self
+        
+        detailVC.mainTitle.text = recentBook.title
+        detailVC.subTitle.text = recentBook.authorsToString()
+        detailVC.bookContents.text = recentBook.contents
+        detailVC.bookPrice.text = recentBook.formattedPrice()
+        if let imageURL = URL(string: recentBook.thumbnail) {
+            detailVC.bookImageView.kf.setImage(with: imageURL)
+        }
+        
+        present(detailVC, animated: true, completion: nil)
+    }
+}
+
+protocol SearchViewControllerDelegate: AnyObject {
+    func searchButtonPressed()
 }

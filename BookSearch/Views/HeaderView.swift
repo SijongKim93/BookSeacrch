@@ -6,13 +6,14 @@
 //
 
 import UIKit
+import SnapKit
 
 class HeaderView: UICollectionReusableView {
     static let identifier = "HeaderView"
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 25)
+        label.font = UIFont.boldSystemFont(ofSize: 20)
         label.textColor = .black
         return label
     }()

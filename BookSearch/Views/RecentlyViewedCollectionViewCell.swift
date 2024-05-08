@@ -33,7 +33,7 @@ class RecentlyViewedCollectionViewCell: UICollectionViewCell {
         
         bookImageView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalToSuperview().multipliedBy(0.9)
+            $0.height.equalToSuperview().multipliedBy(0.85)
         }
         
         titleLabel.snp.makeConstraints {

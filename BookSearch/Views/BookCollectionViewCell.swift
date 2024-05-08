@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class BookCollectionViewCell: UICollectionViewCell {
     static let identifier = "BookCollectionViewCell"
@@ -28,7 +29,6 @@ class BookCollectionViewCell: UICollectionViewCell {
     func setupView() {
         contentView.addSubview(bookImageView)
         contentView.addSubview(titleLabel)
-        
         
         bookImageView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()

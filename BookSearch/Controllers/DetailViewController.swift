@@ -14,6 +14,8 @@ import CoreData
 class DetailViewController: UIViewController {
     static let identifier = "DetailView"
     
+    weak var delegate: SearchViewControllerDelegate?
+    
     var bookData: Document?
     
     let mainTitle: UILabel = {
@@ -66,8 +68,6 @@ class DetailViewController: UIViewController {
         setupView()
         addFloatingButton()
         view.backgroundColor = .systemGray5
-        print(bookData ?? 0)
-        
     }
     
     func setupView() {
@@ -144,11 +144,7 @@ class DetailViewController: UIViewController {
         
         actionButton.addItem(title: "검색하기", image: UIImage(systemName: "magnifyingglass")?.withRenderingMode(.alwaysTemplate)) { item in
             self.dismiss(animated: true) {
-                if let navigationController = self.presentingViewController as? UINavigationController,
-                   let searchViewController = navigationController.topViewController as? SearchViewController {
-                    print("searchbar")
-                    searchViewController.searchBar.becomeFirstResponder()
-                }
+                self.delegate?.searchButtonPressed()
             }
         }
 
@@ -169,5 +165,3 @@ class DetailViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
 }
-
-

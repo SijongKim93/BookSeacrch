@@ -29,6 +29,7 @@
 		4D8948122BE87E3900C9499B /* Product+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8948102BE87E3900C9499B /* Product+CoreDataClass.swift */; };
 		4D8948132BE87E3900C9499B /* Product+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8948112BE87E3900C9499B /* Product+CoreDataProperties.swift */; };
 		4D8948152BE87E6F00C9499B /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8948142BE87E6F00C9499B /* CoreDataManager.swift */; };
+		4D8948172BEB501000C9499B /* RecentlyBookInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8948162BEB501000C9499B /* RecentlyBookInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		4D8948102BE87E3900C9499B /* Product+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Product+CoreDataClass.swift"; sourceTree = "<group>"; };
 		4D8948112BE87E3900C9499B /* Product+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Product+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		4D8948142BE87E6F00C9499B /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		4D8948162BEB501000C9499B /* RecentlyBookInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyBookInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +132,7 @@
 				4D8948112BE87E3900C9499B /* Product+CoreDataProperties.swift */,
 				4D8948102BE87E3900C9499B /* Product+CoreDataClass.swift */,
 				4D22C82F2BE0D49E002FCF5A /* BookData.swift */,
+				4D8948162BEB501000C9499B /* RecentlyBookInfo.swift */,
 				4D8948142BE87E6F00C9499B /* CoreDataManager.swift */,
 			);
 			path = Models;
@@ -240,6 +243,7 @@
 				4D22C80C2BE0CACF002FCF5A /* SearchViewController.swift in Sources */,
 				4D22C8252BE0CDDD002FCF5A /* NetworkingManager.swift in Sources */,
 				4D22C8082BE0CACF002FCF5A /* AppDelegate.swift in Sources */,
+				4D8948172BEB501000C9499B /* RecentlyBookInfo.swift in Sources */,
 				4D22C80A2BE0CACF002FCF5A /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -392,6 +396,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = U68CWSQ94X;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BookSearch/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -420,6 +425,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = U68CWSQ94X;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BookSearch/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
