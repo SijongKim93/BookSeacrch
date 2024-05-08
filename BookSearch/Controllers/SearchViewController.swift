@@ -34,7 +34,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     }
     
 
-    
     func fetchBookData(withQuery query: String) {
         networkingManager.fetchBookData(withQuery: query) { [weak self] result in
             guard let self = self else { return }
@@ -138,7 +137,6 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         return 2
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 {
             return recentlyViewedBooks.count
@@ -196,9 +194,9 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
                 sectionTitle = ""
                 return headerView
             }
-            sectionTitle = "최근 본 책"
+            sectionTitle = "⏰ 최근 본 책"
         case 1:
-            sectionTitle = "Book List"
+            sectionTitle = "📚 Book List"
         default:
             fatalError("Unknown section")
         }

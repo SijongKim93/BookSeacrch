@@ -23,22 +23,18 @@ class CoreDataManager {
         var bookList: [BookCoreData] = []
         
         if let context = context {
-            let request = NSFetchRequest<NSManagedObject>(entityName: self.coreDataName)
-            let idOrder = NSSortDescriptor(key: "title", ascending: true)
-            request.sortDescriptors = [idOrder]
+            let request = NSFetchRequest<BookCoreData>(entityName: self.coreDataName)
+            let dateOrder = NSSortDescriptor(key: "date", ascending: true)
+            request.sortDescriptors = [dateOrder]
             
             do {
-                if let fetchBookList = try context.fetch(request) as? [BookCoreData] {
-                    bookList = fetchBookList
-                }
+                bookList = try context.fetch(request)
             } catch {
-                print("가져오기 실패")
+                print("데이터를 가져오는데 실패했습니다:", error)
             }
         }
-        
         return bookList
     }
-    
     
     func saveBookListData(_ booklist: Document, completion: @escaping () -> Void) {
         guard let context = context else {
@@ -52,6 +48,7 @@ class CoreDataManager {
             newProduct.setValue(authorsString, forKey: "authors")
             newProduct.setValue(booklist.title, forKey: "title")
             newProduct.setValue(booklist.price, forKey: "price")
+            newProduct.setValue(Date(), forKey: "date")
             
             do {
                 try context.save()

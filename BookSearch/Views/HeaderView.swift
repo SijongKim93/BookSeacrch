@@ -14,15 +14,15 @@ class HeaderView: UICollectionReusableView {
     let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.textColor = .black
         return label
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(titleLabel)
+        
         titleLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(5)
+            $0.leading.equalToSuperview().offset(10)
             $0.centerY.equalToSuperview()
         }
         
