@@ -29,10 +29,11 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         setupSearchBar()
         setupCollectionView()
         view.backgroundColor = .white
-        fetchBookData(withQuery: "세이노")
+        fetchBookData(withQuery: "one")
         
     }
     
+
     
     func fetchBookData(withQuery query: String) {
         networkingManager.fetchBookData(withQuery: query) { [weak self] result in
@@ -60,6 +61,16 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         if let query = searchBar.text {
             fetchBookData(withQuery: query)
         }
+        searchBar.resignFirstResponder()
+    }
+    
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        searchBar.showsCancelButton = true
+        return true
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
         searchBar.resignFirstResponder()
     }
     
@@ -214,11 +225,14 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
     
     func addToRecentlyViewedBook(indexPath: IndexPath) {
         guard let selectedBook = bookData?.documents[indexPath.item] else { return }
-        guard !recentlyViewedBooks.contains(where: { $0.title == selectedBook.title }) else { return }
         
-        let recentlyBookInfo = RecentlyBookInfo(title: selectedBook.title, thumbnail: selectedBook.thumbnail, authors: selectedBook.authors, price: selectedBook.price, contents: selectedBook.contents)
-        recentlyViewedBooks.insert(recentlyBookInfo, at: 0)
-        
+        if let existingIndex = recentlyViewedBooks.firstIndex(where: { $0.title == selectedBook.title }) {
+            let recentlyBookInfo = recentlyViewedBooks.remove(at: existingIndex)
+            recentlyViewedBooks.insert(recentlyBookInfo, at: 0)
+        } else {
+            let recentlyBookInfo = RecentlyBookInfo(title: selectedBook.title, thumbnail: selectedBook.thumbnail, authors: selectedBook.authors, price: selectedBook.price, contents: selectedBook.contents)
+            recentlyViewedBooks.insert(recentlyBookInfo, at: 0)
+        }
         collectionView.reloadData()
     }
     

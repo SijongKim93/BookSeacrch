@@ -18,22 +18,6 @@ class DetailViewController: UIViewController {
     
     var bookData: Document?
     
-    let mainTitle: UILabel = {
-        var label =  UILabel()
-        label.font = UIFont.systemFont(ofSize: 23, weight: .bold)
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        return label
-    }()
-    
-    let subTitle: UILabel = {
-        var label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.numberOfLines = 1
-        label.textAlignment = .center
-        return label
-    }()
-    
     let bookImageView: UIImageView = {
         var imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -44,10 +28,33 @@ class DetailViewController: UIViewController {
         return imageView
     }()
     
+    let mainTitle: UILabel = {
+        var label =  UILabel()
+        label.font = UIFont.systemFont(ofSize: 22, weight: .bold)
+        label.numberOfLines = 0
+        label.textAlignment = .left
+        return label
+    }()
+    
+    let subTitle: UILabel = {
+        var label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 15)
+        label.numberOfLines = 1
+        label.textAlignment = .left
+        return label
+    }()
+    
     let bookPrice: UILabel = {
         var label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 20)
-        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 15)
+        label.textAlignment = .left
+        return label
+    }()
+    
+    let bookLabel: UILabel = {
+        var label = UILabel()
+        label.text = "책 소개"
+        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         return label
     }()
     
@@ -56,7 +63,7 @@ class DetailViewController: UIViewController {
     
     let bookContents: UILabel = {
        var label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 25)
+        label.font = UIFont.systemFont(ofSize: 22)
         label.numberOfLines = 0
         return label
     }()
@@ -71,38 +78,45 @@ class DetailViewController: UIViewController {
     }
     
     func setupView() {
+        view.addSubview(bookImageView)
         view.addSubview(mainTitle)
         view.addSubview(subTitle)
-        view.addSubview(bookImageView)
         view.addSubview(bookPrice)
+        view.addSubview(bookLabel)
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubview(bookContents)
         
+        
+        bookImageView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(50)
+            $0.width.equalTo(200)
+            $0.height.equalTo(250)
+            $0.centerX.equalToSuperview()
+        }
+        
         mainTitle.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
-            $0.leading.trailing.equalToSuperview().inset(10)
+            $0.top.equalTo(bookImageView.snp.bottom).offset(50)
+            $0.leading.trailing.equalToSuperview().inset(20)
         }
         
         subTitle.snp.makeConstraints {
             $0.top.equalTo(mainTitle.snp.bottom).offset(10)
-            $0.leading.trailing.equalToSuperview().inset(10)
-        }
-        
-        bookImageView.snp.makeConstraints {
-            $0.top.equalTo(subTitle.snp.bottom).offset(30)
-            $0.width.equalTo(250)
-            $0.height.equalTo(350)
-            $0.centerX.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(20)
         }
         
         bookPrice.snp.makeConstraints {
-            $0.top.equalTo(bookImageView.snp.bottom).offset(20)
-            $0.leading.trailing.equalToSuperview().inset(10)
+            $0.top.equalTo(subTitle.snp.bottom).offset(10)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+        
+        bookLabel.snp.makeConstraints {
+            $0.top.equalTo(bookPrice.snp.bottom).offset(30)
+            $0.leading.trailing.equalToSuperview().inset(20)
         }
         
         scrollView.snp.makeConstraints {
-            $0.top.equalTo(bookPrice.snp.bottom).offset(30)
+            $0.top.equalTo(bookLabel.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
