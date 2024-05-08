@@ -25,6 +25,10 @@ class HeaderView: UICollectionReusableView {
             $0.leading.equalToSuperview().offset(5)
             $0.centerY.equalToSuperview()
         }
+        
+        self.snp.makeConstraints {
+            $0.height.equalTo(40)
+        }
     }
     
     required init?(coder: NSCoder) {

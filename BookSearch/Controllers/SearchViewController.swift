@@ -92,7 +92,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                 break
             }
             
-            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(40))
+            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(0))
             let headerSupplementary = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
             
             section?.boundarySupplementaryItems = [headerSupplementary]
@@ -106,7 +106,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderView.identifier)
         collectionView.dataSource = self
         collectionView.delegate = self
-        
         
         view.addSubview(collectionView)
         
@@ -183,12 +182,12 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         switch indexPath.section {
         case 0:
             if recentlyViewedBooks.isEmpty {
-                headerView.isHidden = true
+                sectionTitle = ""
                 return headerView
             }
             sectionTitle = "최근 본 책"
         case 1:
-            sectionTitle = "Best List"
+            sectionTitle = "Book List"
         default:
             fatalError("Unknown section")
         }
@@ -197,7 +196,6 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         headerView.isHidden = false
         
         headerView.configure(title: sectionTitle ?? "")
-        
         return headerView
     }
     
