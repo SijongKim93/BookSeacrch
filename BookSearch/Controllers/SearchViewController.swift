@@ -32,19 +32,19 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         setupSearchBar()
         setupCollectionView()
         view.backgroundColor = .white
-        fetchBookData(withQuery: "one", page: currentPage)
+        fetchBookData(withQuery: searchBar.text!, page: currentPage)
     }
     
 
     func fetchBookData(withQuery query: String, page: Int) {
-        networkingManager.fetchBookData(withQuery: query, page: page) { [weak self] result in
+        networkingManager.fetchBookData(withQuery: query, page: currentPage) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let bookData):
                 if self.currentPage == 1 {
                     self.bookData = bookData
                 } else {
-                    self.bookData?.documents.append(contentsOf: bookData.documents)
+                    self.bookData?.documents += bookData.documents
                 }
                 self.currentPage += 1
                 self.isEnd = bookData.meta.isEnd
@@ -60,6 +60,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     func setupSearchBar() {
         navigationItem.titleView = searchBar
         searchBar.delegate = self
+        searchBar.text = "세이노"
         searchBar.placeholder = "원하는 책을 검색해주세요."
         searchBar.sizeToFit()
     }
@@ -291,7 +292,6 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         guard let query = searchBar.text else { return }
         fetchBookData(withQuery: query, page: currentPage)
     }
-    
 }
 
 protocol SearchViewControllerDelegate: AnyObject {

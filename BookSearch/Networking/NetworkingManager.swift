@@ -17,14 +17,13 @@ class NetworkingManager {
     
     var isEnd = false
     let pageSize = 40
+    var page = 1
     
     func fetchBookData(withQuery query: String, page: Int, completion: @escaping (Result<BookData, Error>) -> Void) {
-        let startIndex = (page - 1) * pageSize
-        
         let url = "https://dapi.kakao.com/v3/search/book"
         let headers: HTTPHeaders = ["Authorization": "KakaoAK 5aceac1423e03e3ca7f40477c827460d"]
-        let parameters: [String: Any] = ["query": query, "size": pageSize, "page": page]
-
+        let parameters: [String: Any] = ["query": query, "size": pageSize, "page": page] // 페이지 번호 추가
+        
         AF.request(url, parameters: parameters, headers: headers).responseData { [weak self] response in
             guard let self = self else { return }
             
@@ -33,8 +32,7 @@ class NetworkingManager {
                 do {
                     let decodedData = try JSONDecoder().decode(BookData.self, from: data)
                     
-                    // 다음 페이지 존재 여부 확인
-                    let nextPageExists = decodedData.documents.count >= self.pageSize
+                    let nextPageExists = decodedData.meta.isEnd
                     self.isEnd = !nextPageExists
                     
                     completion(.success(decodedData))

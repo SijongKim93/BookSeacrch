@@ -70,7 +70,7 @@ class CoreDataManager {
             do {
                 try context.save()
                 print("코어데이터에 저장되었습니다.")
-                completion(true) // 책이 새로 저장되었음을 알림
+                completion(true)
             } catch {
                 print("코어데이터에 저장하는데 실패했습니다.", error)
                 completion(false)

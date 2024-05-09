@@ -12,6 +12,7 @@ import CoreData
 struct BookData: Codable {
     var documents: [Document]
     let meta: Meta
+    
 }
 
 // MARK: - Meta
