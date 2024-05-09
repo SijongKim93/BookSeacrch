@@ -10,7 +10,20 @@ import CoreData
 
 // MARK: - BookData
 struct BookData: Codable {
-    let documents: [Document]
+    var documents: [Document]
+    let meta: Meta
+}
+
+// MARK: - Meta
+struct Meta: Codable {
+    let isEnd: Bool
+    let pageableCount, totalCount: Int
+
+    enum CodingKeys: String, CodingKey {
+        case isEnd = "is_end"
+        case pageableCount = "pageable_count"
+        case totalCount = "total_count"
+    }
 }
 
 // MARK: - Document

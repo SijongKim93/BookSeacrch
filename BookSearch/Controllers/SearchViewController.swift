@@ -21,6 +21,9 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     var bookData: BookData?
     var recentlyViewedBooks: [RecentlyBookInfo] = []
     
+    var currentPage = 1
+    var isEnd = false
+    
     let searchBar = UISearchBar()
     var collectionView: UICollectionView!
     
@@ -29,17 +32,22 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         setupSearchBar()
         setupCollectionView()
         view.backgroundColor = .white
-        fetchBookData(withQuery: "one")
-        
+        fetchBookData(withQuery: "one", page: currentPage)
     }
     
 
-    func fetchBookData(withQuery query: String) {
-        networkingManager.fetchBookData(withQuery: query) { [weak self] result in
+    func fetchBookData(withQuery query: String, page: Int) {
+        networkingManager.fetchBookData(withQuery: query, page: page) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let bookData):
-                self.bookData = bookData
+                if self.currentPage == 1 {
+                    self.bookData = bookData
+                } else {
+                    self.bookData?.documents.append(contentsOf: bookData.documents)
+                }
+                self.currentPage += 1
+                self.isEnd = bookData.meta.isEnd
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
                 }
@@ -58,7 +66,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let query = searchBar.text {
-            fetchBookData(withQuery: query)
+            currentPage = 1
+            fetchBookData(withQuery: query, page: 1)
         }
         searchBar.resignFirstResponder()
     }
@@ -271,6 +280,18 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         
         present(detailVC, animated: true, completion: nil)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if !isEnd && indexPath.item == (collectionView.numberOfItems(inSection: indexPath.section) - 1) {
+            fetchNextPage()
+        }
+    }
+    
+    func fetchNextPage() {
+        guard let query = searchBar.text else { return }
+        fetchBookData(withQuery: query, page: currentPage)
+    }
+    
 }
 
 protocol SearchViewControllerDelegate: AnyObject {

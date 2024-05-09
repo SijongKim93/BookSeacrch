@@ -85,6 +85,7 @@ class MyPageViewController: UIViewController {
         
         mypageTableView.dataSource = self
         mypageTableView.delegate = self
+        mypageTableView.backgroundColor = .white
         mypageTableView.register(MypageTableViewCell.self, forCellReuseIdentifier: MypageTableViewCell.identifier)
         
         leftButton.addTarget(self, action: #selector(deleteAllBooks), for: .touchUpInside)
@@ -165,6 +166,7 @@ extension MyPageViewController: UITableViewDelegate, UITableViewDataSource, Sear
         cell.mainTitle.text = book.title
         cell.subTitle.text = book.authors
         cell.priceTitle.text = formattedPrice(Int(book.price))
+        cell.selectionStyle = .none
                 
         return cell
     }

@@ -36,9 +36,26 @@ class CoreDataManager {
         return bookList
     }
     
-    func saveBookListData(_ booklist: Document, completion: @escaping () -> Void) {
+    func saveBookListData(_ booklist: Document, completion: @escaping (Bool) -> Void) {
         guard let context = context else {
             print("context를 가져올 수 없습니다.")
+            completion(false)
+            return
+        }
+        
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: coreDataName)
+        request.predicate = NSPredicate(format: "title == %@", booklist.title)
+        
+        do {
+            let count = try context.count(for: request)
+            guard count == 0 else {
+                print("이미 저장된 책입니다.")
+                completion(false)
+                return
+            }
+        } catch {
+            print("중복 체크 실패:", error)
+            completion(false)
             return
         }
         
@@ -53,10 +70,10 @@ class CoreDataManager {
             do {
                 try context.save()
                 print("코어데이터에 저장되었습니다.")
-                completion()
+                completion(true) // 책이 새로 저장되었음을 알림
             } catch {
                 print("코어데이터에 저장하는데 실패했습니다.", error)
-                completion()
+                completion(false)
             }
         }
     }

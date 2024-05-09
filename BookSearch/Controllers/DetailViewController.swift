@@ -54,7 +54,7 @@ class DetailViewController: UIViewController {
     let bookLabel: UILabel = {
         var label = UILabel()
         label.text = "책 소개"
-        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 22, weight: .bold)
         return label
     }()
     
@@ -116,7 +116,7 @@ class DetailViewController: UIViewController {
         }
         
         scrollView.snp.makeConstraints {
-            $0.top.equalTo(bookLabel.snp.bottom)
+            $0.top.equalTo(bookLabel.snp.bottom).offset(5)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
@@ -133,26 +133,35 @@ class DetailViewController: UIViewController {
         
     }
     
-    func saveBookToCoreData() {
+    func saveBookToCoreData(completion: @escaping (Bool) -> Void) {
         guard let bookData = bookData else {
             print("bookData가 없습니다.")
             return
         }
-        
-        CoreDataManager.shared.saveBookListData(bookData) {
-            print("코어데이터에 저장되었습니다.")
+
+        CoreDataManager.shared.saveBookListData(bookData) { isSaved in
+            if isSaved {
+                print("코어데이터에 저장되었습니다.")
+                completion(true)
+            } else {
+                print("이미 저장된 책입니다.")
+                completion(false)
+            }
         }
     }
     
     func addFloatingButton() {
         actionButton.addItem(title: "책담기", image: UIImage(systemName: "book.fill")?.withRenderingMode(.alwaysTemplate)) { [self] item in
-            self.saveBookToCoreData()
-            
-            let bookName = self.bookData?.title
-            if let bookName = bookName {
-                showAlert(message: "\(bookName) 저장되었습니다.")
-            } else {
-                showAlert(message: "책이름 없이 저장되었습니다.")
+            self.saveBookToCoreData { isSaved in
+                if isSaved {
+                    if let bookName = self.bookData?.title {
+                        self.showAlert(message: "\(bookName) 저장되었습니다.")
+                    } else {
+                        self.showAlert(message: "책이름 없이 저장되었습니다.")
+                    }
+                } else {
+                    self.showAlert(message: "이미 저장된 책입니다.")
+                }
             }
         }
         
