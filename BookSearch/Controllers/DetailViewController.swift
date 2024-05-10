@@ -133,6 +133,7 @@ class DetailViewController: UIViewController {
         
     }
     
+    // MARK: - 책 담기 시 코어데이터에 해당 값 저장
     func saveBookToCoreData(completion: @escaping (Bool) -> Void) {
         guard let bookData = bookData else {
             print("bookData가 없습니다.")
@@ -150,6 +151,7 @@ class DetailViewController: UIViewController {
         }
     }
     
+    // MARK: - Floating Button 구현
     func addFloatingButton() {
         actionButton.addItem(title: "책담기", image: UIImage(systemName: "book.fill")?.withRenderingMode(.alwaysTemplate)) { [self] item in
             self.saveBookToCoreData { isSaved in
@@ -175,10 +177,15 @@ class DetailViewController: UIViewController {
             self.dismiss(animated: true, completion: nil)
         }
         
+        actionButton.buttonColor = .systemIndigo
+        actionButton.configureDefaultItem { item in
+            item.buttonImageColor = .systemIndigo
+        }
+        
         actionButton.display(inViewController: self)
     }
     
-    
+    // MARK: - 알럿 구현 메서드
     func showAlert(message: String) {
         let alert = UIAlertController(title: "알림", message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "확인", style: .default) { _ in

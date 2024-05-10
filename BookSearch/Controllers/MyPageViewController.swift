@@ -65,12 +65,14 @@ class MyPageViewController: UIViewController {
         view.backgroundColor = .white
     }
     
+    // MARK: - 마이페이지 내 코어데이터 업데이트
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         bookList = CoreDataManager.shared.getBookListFromCoreData()
         mypageTableView.reloadData()
     }
     
+    // MARK: - SetupUI
     func setupUI() {
         view.addSubview(topStackView)
         view.addSubview(viewLine)
@@ -115,10 +117,12 @@ class MyPageViewController: UIViewController {
         }
     }
     
+    // MARK: - 검색 탭으로 이동 메서드 구현
     @objc func searchButtonTapped() {
         searchButtonPressed()
     }
     
+    // MARK: - 모든 저장한 책 삭제 메서드 구현
     @objc func deleteAllBooks() {
         let alertController = UIAlertController(title: "삭제 확인", message: "담은 책을 모두 삭제 하시겠습니까?", preferredStyle: .alert)
         
@@ -140,16 +144,16 @@ class MyPageViewController: UIViewController {
 
 extension MyPageViewController: UITableViewDelegate, UITableViewDataSource, SearchViewControllerDelegate {
     
+    // MARK: - 추가 버튼 시 검색 탭 이동
     func searchButtonPressed() {
         let searchView = SearchViewController()
         guard let tabBarController = self.tabBarController else { return }
         
         tabBarController.selectedIndex = 0
         delegate?.searchButtonPressed()
-        print("확인")
     }
     
-    
+    // MARK: - TableView Setting
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         bookList.count
     }
@@ -171,6 +175,7 @@ extension MyPageViewController: UITableViewDelegate, UITableViewDataSource, Sear
         return cell
     }
     
+    // MARK: - Cell 개별 삭제 기능 구현
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let bookToDelete = bookList[indexPath.row]

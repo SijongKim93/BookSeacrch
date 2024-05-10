@@ -19,6 +19,7 @@ class CoreDataManager {
     
     let coreDataName: String = "BookCoreData"
     
+    // MARK: - CoreData 가져오기
     func getBookListFromCoreData() -> [BookCoreData] {
         var bookList: [BookCoreData] = []
         
@@ -36,6 +37,7 @@ class CoreDataManager {
         return bookList
     }
     
+    // MARK: - CoreData 저장하기
     func saveBookListData(_ booklist: Document, completion: @escaping (Bool) -> Void) {
         guard let context = context else {
             print("context를 가져올 수 없습니다.")
@@ -78,6 +80,7 @@ class CoreDataManager {
         }
     }
     
+    // MARK: - CoreData 삭제하기
     func deleteBookList(_ bookList: BookCoreData, completion: @escaping () -> Void) {
         guard let context = context else {
             print("content를 가져올 수 없습니다.")
@@ -101,6 +104,7 @@ class CoreDataManager {
         }
     }
     
+    // MARK: - CoreData 전체 삭제 하기
     func deleteAllBooks(completion: @escaping () -> Void) {
         guard let context = context else {
             print("CoreData context가 유효하지 않습니다.")

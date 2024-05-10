@@ -35,7 +35,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         fetchBookData(withQuery: searchBar.text!, page: currentPage)
     }
     
-
+    // MARK: - NetWork Data 가져오기
     func fetchBookData(withQuery query: String, page: Int) {
         networkingManager.fetchBookData(withQuery: query, page: currentPage) { [weak self] result in
             guard let self = self else { return }
@@ -57,14 +57,16 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         }
     }
     
+    // MARK: - Setup SearchBar
     func setupSearchBar() {
         navigationItem.titleView = searchBar
         searchBar.delegate = self
-        searchBar.text = "세이노"
+        searchBar.text = "해리"
         searchBar.placeholder = "원하는 책을 검색해주세요."
         searchBar.sizeToFit()
     }
     
+    // MARK: - SeacrchBar 활성화 메서드
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let query = searchBar.text {
             currentPage = 1
@@ -73,6 +75,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         searchBar.resignFirstResponder()
     }
     
+    // MARK: - SeacrchBar 활성화 시 Cancel 버튼 활성화
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
         searchBar.showsCancelButton = true
         return true
@@ -83,6 +86,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         searchBar.resignFirstResponder()
     }
     
+    // MARK: - Setup CollectionView , CompositionalLayout Setting
     func setupCollectionView() {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
             var section: NSCollectionLayoutSection?
@@ -126,6 +130,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderView.identifier)
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.backgroundColor = .white
         
         view.addSubview(collectionView)
         
@@ -139,14 +144,17 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
 
 extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegate, SearchViewControllerDelegate {
     
+    // MARK: - SearchViewControllerDelegate 프로토콜 필수 메서드 구현
     func searchButtonPressed() {
         self.searchBar.becomeFirstResponder()
     }
     
+    // MARK: - CollectionView Section
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 2
     }
     
+    // MARK: - CollectionView Cell Count
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 {
             return recentlyViewedBooks.count
@@ -155,6 +163,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         }
     }
     
+    // MARK: - CollectionView Cell Data
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecentlyViewedCollectionViewCell.identifier, for: indexPath) as? RecentlyViewedCollectionViewCell else { fatalError("에러입니다.") }
@@ -190,6 +199,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         }
     }
     
+    // MARK: - CollectionView HeaderView Setting
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard kind == UICollectionView.elementKindSectionHeader else {
             fatalError("Unexpected supplementary view kind")
@@ -218,6 +228,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         return headerView
     }
     
+    // MARK: - CollectionView Cell 선택 시 상세 페이지 이동
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
@@ -231,6 +242,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         }
     }
     
+    // MARK: - CollectionView Cell 선택 시 상세 페이지 이동한 책 데이터 전달 (최근 본 책)
     func addToRecentlyViewedBook(indexPath: IndexPath) {
         guard let selectedBook = bookData?.documents[indexPath.item] else { return }
         
@@ -244,6 +256,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         collectionView.reloadData()
     }
     
+    // MARK: - 상세페이지 이동 및 데이터 전달
     func showBookDetail(at indexPath: IndexPath) {
         let detailVC = DetailViewController()
         let bookData = bookData?.documents[indexPath.item]
@@ -263,6 +276,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         present(detailVC, animated: true, completion: nil)
     }
     
+    // MARK: - 최근 본 책 데이터 전달, 상세페이지 이동 및 데이터 전달
     func showBookRecent(at indexPath: IndexPath) {
         let detailVC = DetailViewController()
         let recentBook = recentlyViewedBooks[indexPath.item]
@@ -282,6 +296,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         present(detailVC, animated: true, completion: nil)
     }
     
+    // MARK: - 무한 스크롤 구현
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if !isEnd && indexPath.item == (collectionView.numberOfItems(inSection: indexPath.section) - 1) {
             fetchNextPage()
@@ -294,6 +309,8 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
     }
 }
 
+
+// MARK: - 화면 전환 및 서치바 활성화 프로토콜 구현
 protocol SearchViewControllerDelegate: AnyObject {
     func searchButtonPressed()
 }

@@ -11,7 +11,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
+    
+    // MARK: - TapBar Setting
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
@@ -26,7 +27,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         secondVC.tabBarItem = UITabBarItem(title: "마이페이지", image: UIImage(systemName: "person.circle"), tag: 1)
         
         tabBarVC.viewControllers = [firstVC, secondVC]
-        tabBarVC.tabBar.backgroundColor = .systemGray5
+        tabBarVC.tabBar.backgroundColor = .white
+        tabBarVC.tabBar.tintColor = .systemIndigo
         
         self.window?.rootViewController = tabBarVC
         window?.makeKeyAndVisible()
