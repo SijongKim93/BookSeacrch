@@ -76,7 +76,7 @@
 
 </br>
 
-### 3) My Page
+### 3) My Page
 
 <img width="200" src ="https://github.com/SijongKim93/BookSeacrch/assets/158182449/1b14f0fe-4d6c-4b4c-8894-f15a9526806b">
 <img width="200" src ="https://github.com/SijongKim93/BookSeacrch/assets/158182449/6a913f45-17b5-447b-a523-8e0a0caf17f5">
