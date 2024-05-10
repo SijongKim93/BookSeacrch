@@ -20,6 +20,7 @@
 ## Description
 
 `base` : Code Base
+
 `Period` : 24.04.30 ~ 24.05.09
 
 현재 시중에 확인되는 책 정보를 모두 담고 있는 카카오 북 검색 API 를 활용한 책 검색 앱
